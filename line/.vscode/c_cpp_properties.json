@@ -1,0 +1,53 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/waraset/ts_01_ws/install/spawn_obj_gazebo_package/include/**",
+        "/home/waraset/neobotix_workspace/install/carver_interfaces/include/**",
+        "/home/waraset/fra333_lab1_0/install/lab1_interfaces/include/**",
+        "/home/waraset/ros2_ws/install/my_first_package/include/**",
+        "/home/waraset/ros2_ws/install/carver_interfaces/include/**",
+        "/home/waraset/ros2_ws/install/action_tutorials_interfaces/include/**",
+        "/home/waraset/template_ros2_cmakelist_python/install/my_first_package/include/**",
+        "/home/waraset/test_nav2/install/smac_planner/include/**",
+        "/home/waraset/test_nav2/install/nav2_controller/include/**",
+        "/home/waraset/test_nav2/install/dwb_plugins/include/**",
+        "/home/waraset/test_nav2/install/dwb_critics/include/**",
+        "/home/waraset/test_nav2/install/dwb_core/include/**",
+        "/home/waraset/test_nav2/install/nav_2d_utils/include/**",
+        "/home/waraset/test_nav2/install/dwb_msgs/include/**",
+        "/home/waraset/test_nav2/install/nav_2d_msgs/include/**",
+        "/home/waraset/test_nav2/install/nav2_waypoint_follower/include/**",
+        "/home/waraset/test_nav2/install/nav2_regulated_pure_pursuit_controller/include/**",
+        "/home/waraset/test_nav2/install/nav2_recoveries/include/**",
+        "/home/waraset/test_nav2/install/nav2_planner/include/**",
+        "/home/waraset/test_nav2/install/nav2_navfn_planner/include/**",
+        "/home/waraset/test_nav2/install/nav2_core/include/**",
+        "/home/waraset/test_nav2/install/costmap_queue/include/**",
+        "/home/waraset/test_nav2/install/nav2_costmap_2d/include/**",
+        "/home/waraset/test_nav2/install/nav2_voxel_grid/include/**",
+        "/home/waraset/test_nav2/install/nav2_rviz_plugins/include/**",
+        "/home/waraset/test_nav2/install/nav2_map_server/include/**",
+        "/home/waraset/test_nav2/install/nav2_lifecycle_manager/include/**",
+        "/home/waraset/test_nav2/install/nav2_bt_navigator/include/**",
+        "/home/waraset/test_nav2/install/nav2_behavior_tree/include/**",
+        "/home/waraset/test_nav2/install/nav2_amcl/include/**",
+        "/home/waraset/test_nav2/install/nav2_util/include/**",
+        "/home/waraset/test_nav2/install/nav2_msgs/include/**",
+        "/home/waraset/fra333/install/my_first_package/include/**",
+        "/opt/ros/foxy/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
