@@ -4,6 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 from os.path import expanduser as os
+import numpy as np
+from sklearn.cluster import DBSCAN
+from sklearn import metrics
 def plot_check_cluster(i_number):
     zero = "0"
     if len(str(i_number)) >1:
@@ -30,33 +33,7 @@ def plot_check_cluster(i_number):
     b_t = 0.25
     center_list = []
 
-    # for i in range(len(x_list)):
-    #     point_1[0] = x_list[i]
-    #     point_1[1] = y_list[i]
-
-    #     point_2[0] = point_1[0]-h_t
-    #     point_2[1] = point_1[1]-b_t/2
-
-    #     point_3[0] = point_1[0]+h_t
-    #     point_3[1] = point_1[1]-b_t/2
-
-    #     plt.plot(point_2[0],point_2[1],"k*")
-    #     plt.plot(point_3[0],point_3[1],"y*")
-
-    #     for j in range(len(x_list)):
-            
-    #             x_d_p = math.pow((x_list[j]-point_2[0]),2)
-    #             y_d_p = math.pow((y_list[j]-point_2[1]),2)
-    #             dis = math.sqrt(x_d_p+y_d_p)
-    #             if (dis <= er_tp):
-    #                 x_d_p = math.pow((x_list[j]-point_2[0]),2)
-    #                 y_d_p = math.pow((y_list[j]-point_2[1]),2)
-    #                 dis = math.sqrt(x_d_p+y_d_p)
-    #                 if (dis <= er_tp):
-    #                     print("JESUSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS : "+str(j)+"  file : "+str(i_number))
-    #                     center_list.append(i)
-    #                     pass
-                
+    
 
     spc = 0 
     color_num = 0
@@ -86,6 +63,59 @@ def plot_check_cluster(i_number):
     for i in range(len(center_list)):
         plt.plot(x_list[center_list[i]],y_list[center_list[i]],"rd")
     plt.show()
+    lidar_DBscan(x_list,y_list)
+
+def lidar_DBscan(x_list,y_list):
+    lidar_list = []
+    for i in range(len(x_list)):
+
+        lidar_list.append([x_list[i],y_list[i]])
+
+    liadar_array = np.array(lidar_list)
+
+    print(type(liadar_array))
+    db = DBSCAN(eps=0.05, min_samples=2).fit(liadar_array)
+    labels = db.labels_
+    n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+    n_noise_ = list(labels).count(-1)
+
+    print("Estimated number of clusters: %d" % n_clusters_)
+    print("Estimated number of noise points: %d" % n_noise_)
+    unique_labels = set(labels)
+    core_samples_mask = np.zeros_like(labels, dtype=bool)
+    core_samples_mask[db.core_sample_indices_] = True
+
+    colors = [plt.cm.Spectral(each) for each in np.linspace(0, 1, len(unique_labels))]
+    for k, col in zip(unique_labels, colors):
+        if k == -1:
+            # Black used for noise.
+            col = [0, 0, 0, 1]
+
+        class_member_mask = labels == k
+
+        xy = liadar_array[class_member_mask & core_samples_mask]
+        plt.plot(
+            xy[:, 0],
+            xy[:, 1],
+            "o",
+            markerfacecolor=tuple(col),
+            markeredgecolor="k",
+            markersize=14,
+        )
+
+        xy = liadar_array[class_member_mask & ~core_samples_mask]
+        plt.plot(
+            xy[:, 0],
+            xy[:, 1],
+            "o",
+            markerfacecolor=tuple(col),
+            markeredgecolor="k",
+            markersize=6,
+        )
+
+    plt.title(f"Estimated number of clusters: {n_clusters_}")
+    plt.show()
+
 
 def main(args=None):
     start_file = 1

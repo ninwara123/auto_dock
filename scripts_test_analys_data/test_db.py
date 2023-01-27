@@ -29,12 +29,12 @@ from sklearn.preprocessing import StandardScaler
 #     n_samples=750, centers=centers, cluster_std=0.4, random_state=0
 # )
 
-X = np.array(lidar_list)
+liadar_array = np.array(lidar_list)
 # print(X)
 
 
-print(type(X))
-db = DBSCAN(eps=0.05, min_samples=2).fit(X)
+print(type(liadar_array))
+db = DBSCAN(eps=0.05, min_samples=2).fit(liadar_array)
 labels = db.labels_
 n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
 n_noise_ = list(labels).count(-1)
@@ -53,7 +53,7 @@ for k, col in zip(unique_labels, colors):
 
     class_member_mask = labels == k
 
-    xy = X[class_member_mask & core_samples_mask]
+    xy = liadar_array[class_member_mask & core_samples_mask]
     plt.plot(
         xy[:, 0],
         xy[:, 1],
@@ -63,7 +63,7 @@ for k, col in zip(unique_labels, colors):
         markersize=14,
     )
 
-    xy = X[class_member_mask & ~core_samples_mask]
+    xy = liadar_array[class_member_mask & ~core_samples_mask]
     plt.plot(
         xy[:, 0],
         xy[:, 1],
