@@ -2,6 +2,7 @@ start_file = 1
 end_file = 121
 date_data = "26-01-66" #"DD-MM-YY"
 break_al = 0
+show_key = 1
 import pandas as pd
 import numpy as np
 
@@ -25,90 +26,112 @@ def plot_check_cluster(i_number):
     
     color = ["b","g","r","c","m","y","k","w"]
 
-    cluster_dict = lidar_DBscan(x_list,y_list,eps_value=0.05,min_samples_value=5,show_plot = 0)
+    cluster_dict = lidar_DBscan(x_list,y_list,eps_value=0.05,min_samples_value=5,show_plot = 1)
     
     # print(cluster_dict[1])
     x_new,y_new = x_list[min(cluster_dict[1]):max(cluster_dict[1])],y_list[min(cluster_dict[1]):max(cluster_dict[1])]
     # lidar_DBscan(x_new,y_new,eps_value=0.02,min_samples_value=5,show_plot = 1)
 
-    # fig = plt.gcf()
-    # ax = fig.gca()
-    # top_point = y_new.index(max(y_new))
-    # circle2 = plt.Circle((x_new[top_point], y_new[top_point]), 0.2, color='b', fill=False)
 
-        
-    # ax = plt.gca()
+    idx_v_t,label_charger = check_charger(x_list,y_list, cluster_dict)
+    split_r_l_charger(x_list,y_list,cluster_dict,label_charger,idx_v_t)
+    # print(ix_v_t)
+
+def split_r_l_charger(x_list,y_list,cluster_dict,label_charger,idx_v_t):
+
+    plt.plot(x_list[idx_v_t],y_list[idx_v_t],"r^")
+    fig = plt.gcf()
+    ax = fig.gca()
+    circle2 = plt.Circle((x_list[idx_v_t],y_list[idx_v_t]), 0.2, color='m', fill=False)
+    ax = plt.gca()
     # ax.cla() # clear things for fresh plot
-    # ax.add_patch(circle2)
-    
-    # ax.plot(x_new,y_new,"ro",)
-    # ax.plot(x_list,y_list,"go",)
+    ax.add_patch(circle2)
+    for i in range(len(cluster_dict[label_charger])):
+        pass
 
-    # plt.plot(x_new,y_new,"ro")
     
-    dis_point = 1
-    cluster_num = 1
-    e_d = 0.02
 
-    end_point_cluster = []
-    for i in range(len(x_new)-dis_point):
-        x_d_p = math.pow((x_new[i]-x_new[i+dis_point]),2)
-        y_d_p = math.pow((y_new[i]-y_new[i+dis_point]),2)
-        dis = math.sqrt(x_d_p+y_d_p)
-        if (dis > e_d):
-            cluster_num +=1
-            # print(i)
-            end_point_cluster.append(i)
-            # plt.plot(x_new[i],y_new[i],"gx")
-    # end_point_cluster.append(len(x_new)-1)
-    # plt.plot(y[len(x_new)-1],x_new[len(x_new)-1],"gx")
-    # plt.show()
-    # print(y_new)
-    slope = []
-    l = 2
-    for i in range(len(x_new)-l):
-        slope.append((y_new[i+l]-y_new[i])/(x_new[i+l]-x_new[i]))
-    # print(slope) 
-    # plt.plot(x_list,y_list,"bx")
-
-    # for i in range(len(slope)):
-    #     if abs(slope[i]) < 0.3 :
-    #         plt.plot(x_new[i],y_new[i],"ro")
-    # plt.show()
-    # print(cluster_dict[1])
-    # cluster_dict_2 = lidar_DBscan(x_new,y_new,eps_value=0.02,min_samples_value=2,show_plot = 1)
-    # print(len(cluster_dict))
-    
+def check_charger(x_list,y_list, cluster_dict):
     dis_list = []
+    threshold_dis =0.45
+    e_dis = 0.07
+    index_start_point_cluster = 0
+    label_cluster_charger = 0
+
     for i in range(len(cluster_dict)-1):
+        # index_start_point_cluster += cluster_dict[i][cluster_dict[i].index(min(cluster_dict[i]))]
+        index_start_point_cluster = cluster_dict[i][0]
         # print(cluster_dict[i])
 
         # print(x_list[x_list.index(max(cluster_dict[i]))])
         # print(y_list[y_list.index(max(cluster_dict[i]))])
         # print(min(cluster_dict[i]))
         # print(max(cluster_dict[i]))
-        
-        pow_dis_x = (x_list[max(cluster_dict[i])]-x_list[min(cluster_dict[i])])**2
-        pow_dis_y = (y_list[max(cluster_dict[i])]-y_list[min(cluster_dict[i])])**2
-        dis_xy = math.sqrt(pow_dis_x+pow_dis_y)
 
+        dif_x = (x_list[max(cluster_dict[i])]-x_list[min(cluster_dict[i])])
+        pow_dif_x = dif_x**2
+        dif_y = (y_list[max(cluster_dict[i])]-y_list[min(cluster_dict[i])])
+        pow_dif_y = dif_y**2
+        dis_xy = math.sqrt(pow_dif_x+pow_dif_y)
         print(dis_xy)
-        if dis_xy <= 0.5:
-            if dis_xy >= 0.4:
-                dis_list.append(dis_xy)
-                
+        
+        if abs(dis_xy - threshold_dis) <= e_dis : 
+
+            dis_list.append(dis_xy)
+            center_base_x = (x_list[max(cluster_dict[i])]+x_list[min(cluster_dict[i])])/2
+            center_base_y  = (y_list[max(cluster_dict[i])]+y_list[min(cluster_dict[i])])/2
+            plt.plot(center_base_x,center_base_y,"b^")
+            
+            slope_charger = dif_y/dif_x
+            print("slope_charger : "+str(slope_charger))
+            theta_charger = math.atan(slope_charger)
+            print("theta_charger : "+str(theta_charger))
+
+
+            x_rot_z_list = []
+            y_rot_z_list = []
+            for j in range(len(cluster_dict[i])):
+                point_x = x_list[cluster_dict[i][j]]
+                point_y = y_list[cluster_dict[i][j]]
+                x_rot_z_list.append((point_x*math.cos(theta_charger)) + (point_y*math.sin(theta_charger)))
+                y_rot_z_list.append((point_y*math.cos(theta_charger)) - (point_x*math.sin(theta_charger)))
+
+            # print("threshold")
+            plt.plot(x_rot_z_list,y_rot_z_list,"cx")
+            # print("x_rot_z_list : "+str(x_rot_z_list))
+            # print("y_rot_z_list : "+str(y_rot_z_list))
+            # print("min x : "+str(x_rot_z_list[x_rot_z_list.index(min(x_rot_z_list))]))
+            # print("max x : "+str(x_rot_z_list[x_rot_z_list.index(max(x_rot_z_list))]))
+
+            min_y_rot = y_rot_z_list[y_rot_z_list.index(min(y_rot_z_list))]
+            max_y_rot = y_rot_z_list[y_rot_z_list.index(max(y_rot_z_list))]
+            min_x_rot = x_rot_z_list[x_rot_z_list.index(min(x_rot_z_list))]
+
+            print("min y : "+str(min_y_rot ))
+            print("max y : "+str(max_y_rot))
+            plt.plot([min_x_rot,min_x_rot],[min_y_rot,max_y_rot],"r")
+            dif_y_rot = max_y_rot-min_y_rot 
+            print("dif_y_rot (high triangel measure) : "+str(dif_y_rot))
+            if  dif_y_rot >= 0.1 :
+                # print("triiiii")
+                index_vertex_point_tri_of_list = y_rot_z_list.index(max(y_rot_z_list))
+                print("index_vertex_point_tri_of_list : "+str(index_vertex_point_tri_of_list))
+                index_vertex_point_tri_of_cluster = index_start_point_cluster+index_vertex_point_tri_of_list 
+                print("index_max_point_of_cluster : "+str(index_vertex_point_tri_of_cluster))
+                label_cluster_charger = i
+                print("label_cluster_charger : "+str(label_cluster_charger))
+        # plt.plot(cluster_dict[i][index_vertex_point_tri_of_list])
         line_dis_x = [x_list[min(cluster_dict[i])], x_list[max(cluster_dict[i])]]
-        line_dis_y = [y_list[min(cluster_dict[i])],y_list[max(cluster_dict[i])]]
+        line_dis_y = [y_list[min(cluster_dict[i])], y_list[max(cluster_dict[i])]]
         # print(x_list[min(cluster_dict[i])])
         # print(x_list[0])
         # print(line_dis_x)
         # print(line_dis_y)
-        plt.plot(line_dis_x,line_dis_y,"r")
-    if (len(dis_list)) == 0:
-        dis_list.append(200)
-    if (len(dis_list)) > 1:
-        dis_list.append(300)
-    return dis_list
+        plt.plot(line_dis_x,line_dis_y,"y")
+        
+    
+    print(dis_list)
+    return index_vertex_point_tri_of_cluster,label_cluster_charger
 
 
 # eps=0.04, min_samples=5
@@ -128,7 +151,6 @@ def lidar_DBscan(x_list,y_list,eps_value=0.04,min_samples_value=5,show_plot = 1)
 
     print("Estimated number of clusters: %d" % n_clusters_)
     print("Estimated number of noise points: %d" % n_noise_)
-
 
     plt.title("Estimated number of clusters: {n_clusters_}")
     # print( "labels : "+str(db.labels_ ))
@@ -151,9 +173,9 @@ def lidar_DBscan(x_list,y_list,eps_value=0.04,min_samples_value=5,show_plot = 1)
     
         
 
+    
 
-
-
+    
 
 
     if show_plot == 1:
@@ -188,7 +210,7 @@ def lidar_DBscan(x_list,y_list,eps_value=0.04,min_samples_value=5,show_plot = 1)
                 markeredgecolor="k",
                 markersize=6,
             )
-        plt.show()
+        ### plt.show()
     return cluster_dict 
 
 
@@ -202,15 +224,18 @@ def main(args=None):
         print("-----------------------------------------------------------------------------------------")
         print("-----------------------------------------------------------------------------------------")
         print("current_file : " + str(current_file))
-        dis_list.append(plot_check_cluster(current_file))
+        plot_check_cluster(current_file)
         current_file += 1
-    print("num_dis_list"+str(len(dis_list)))
-    print(dis_list)
-    for i in range(len(dis_list)):
-        if dis_list[i].find(200):
-            print("error : file "+str(i)+"cannot find charger")
-        if dis_list[i][0].find(200):
-            print("error : file "+str(i)+"charger more than 1")
+        if show_key == 1:
+            plt.show()
+
+    # print("num_dis_list"+str(len(dis_list)))
+    # print(dis_list)
+    # for i in range(len(dis_list)):
+    #     if dis_list[i].find(200):
+    #         print("error : file "+str(i)+"cannot find charger")
+    #     if dis_list[i][0].find(200):
+    #         print("error : file "+str(i)+"charger more than 1")
 
     
 # print()
