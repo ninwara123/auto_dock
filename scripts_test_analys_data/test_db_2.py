@@ -1,21 +1,19 @@
-import cv2
-import numpy as np
+my_list = ['a-1', 'b-2', 'c-3', 'd-4']
 
-image = cv2.imread('1.png')
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-thresh = cv2.threshold(gray, 0, 255,cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+# ✅ split each element in list and keep first part
+result_1 = [item.split('-', 1)[0] for item in my_list]
+print(result_1)  # 👉️ ['a', 'b', 'c', 'd']
 
-kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9,9))
-close = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel, iterations=3)
+# ✅ split each element in list into nested lists
+result_2 = [item.split('-') for item in my_list]
+print(result_2)  # 👉 [['a', '1'], ['b', '2'], ['c', '3'], ['d', '4']]
 
-minLineLength = 550
-maxLineGap = 70
-lines = cv2.HoughLinesP(close,1,np.pi/180,100,minLineLength,maxLineGap)
-for line in lines:
-    for x1,y1,x2,y2 in line:
-        cv2.line(image,(x1,y1),(x2,y2),(36,255,12),3)
+# ✅ split each element in list and flatten list
+result_3 = [item.split('-') for item in my_list]
 
-cv2.imshow('thresh', thresh)
-cv2.imshow('close', close)
-cv2.imshow('image', image)
-cv2.waitKey()
+result_3_flat = [item for l in result_3 for item in l]
+print(result_3_flat)  # 👉️ ['a', '1', 'b', '2', 'c', '3', 'd', '4']
+
+# ✅ split specific element in list
+result_4 = my_list[0].split('-')
+print(result_4)  # 👉️ ['a', '1']
