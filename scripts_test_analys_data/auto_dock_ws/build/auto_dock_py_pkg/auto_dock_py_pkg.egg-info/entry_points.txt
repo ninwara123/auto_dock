@@ -1,4 +1,0 @@
-[console_scripts]
-01_pub = auto_dock_py_pkg.01_pub:main
-01_sub = auto_dock_py_pkg.01_sub:main
-
