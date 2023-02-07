@@ -1,0 +1,25 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/carver/auto_dock_ws/install/my_first_package/include/**",
+        "/home/carver/navi_ws/install/neo_local_planner/include/**",
+        "/home/carver/navi_ws/install/carver_interfaces/include/**",
+        "/home/carver/slam_ws/install/slam_toolbox/include/**",
+        "/home/carver/roboteq_driff_ws/install/roboteq_diff_msgs/include/**",
+        "/opt/ros/foxy/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

@@ -1,0 +1,24 @@
+[0.847s] Invoking command in '/home/carver/auto_dock_ws/build/auto_dock_py_pkg': PYTHONPATH=/home/carver/auto_dock_ws/install/auto_dock_py_pkg/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --prefix /home/carver/auto_dock_ws/install/auto_dock_py_pkg --editable --build-directory /home/carver/auto_dock_ws/build/auto_dock_py_pkg/build --no-deps install_data --install-dir /home/carver/auto_dock_ws/install/auto_dock_py_pkg
+[1.168s] running develop
+[1.369s] running egg_info
+[1.369s] creating auto_dock_py_pkg.egg-info
+[1.369s] writing auto_dock_py_pkg.egg-info/PKG-INFO
+[1.370s] writing dependency_links to auto_dock_py_pkg.egg-info/dependency_links.txt
+[1.370s] writing entry points to auto_dock_py_pkg.egg-info/entry_points.txt
+[1.370s] writing requirements to auto_dock_py_pkg.egg-info/requires.txt
+[1.370s] writing top-level names to auto_dock_py_pkg.egg-info/top_level.txt
+[1.379s] writing manifest file 'auto_dock_py_pkg.egg-info/SOURCES.txt'
+[1.410s] reading manifest file 'auto_dock_py_pkg.egg-info/SOURCES.txt'
+[1.410s] writing manifest file 'auto_dock_py_pkg.egg-info/SOURCES.txt'
+[1.456s] running build_ext
+[1.456s] Creating /home/carver/auto_dock_ws/install/auto_dock_py_pkg/lib/python3.8/site-packages/site.py
+[1.460s] Creating /home/carver/auto_dock_ws/install/auto_dock_py_pkg/lib/python3.8/site-packages/auto-dock-py-pkg.egg-link (link to .)
+[1.461s] 
+[1.461s] Installed /home/carver/auto_dock_ws/build/auto_dock_py_pkg
+[1.461s] running install_data
+[1.461s] creating /home/carver/auto_dock_ws/install/auto_dock_py_pkg/share/ament_index
+[1.461s] creating /home/carver/auto_dock_ws/install/auto_dock_py_pkg/share/ament_index/resource_index
+[1.461s] creating /home/carver/auto_dock_ws/install/auto_dock_py_pkg/share/ament_index/resource_index/packages
+[1.462s] copying resource/auto_dock_py_pkg -> /home/carver/auto_dock_ws/install/auto_dock_py_pkg/share/ament_index/resource_index/packages
+[1.462s] copying package.xml -> /home/carver/auto_dock_ws/install/auto_dock_py_pkg/share/auto_dock_py_pkg
+[1.492s] Invoked command in '/home/carver/auto_dock_ws/build/auto_dock_py_pkg' returned '0': PYTHONPATH=/home/carver/auto_dock_ws/install/auto_dock_py_pkg/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --prefix /home/carver/auto_dock_ws/install/auto_dock_py_pkg --editable --build-directory /home/carver/auto_dock_ws/build/auto_dock_py_pkg/build --no-deps install_data --install-dir /home/carver/auto_dock_ws/install/auto_dock_py_pkg

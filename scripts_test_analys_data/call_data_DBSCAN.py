@@ -1,6 +1,6 @@
-start_file = 31
-end_file = 121
-date_data = "26-01-66" #"DD-MM-YY"
+start_file = 211
+end_file = 300
+date_data = "01-02-66" #"DD-MM-YY"
 break_al = 0
 show_key = 1
 import pandas as pd
@@ -33,12 +33,18 @@ def plot_check_cluster(i_number):
     # lidar_DBscan(x_new,y_new,eps_value=0.02,min_samples_value=5,show_plot = 1)
 
 
-    idx_vtx_tri,label_charger = check_charger(x_list,y_list, cluster_dict)
+    idx_vtx_tri,label_charger,list_max_dis = check_charger(x_list,y_list, cluster_dict)
+    print(len(list_max_dis))
+    print((list_max_dis))
 
-
-    r_idx_list , l_idx_list = split_r_l_charger(x_list,y_list,cluster_dict,label_charger,idx_vtx_tri)
-    cal_theta(x_list,y_list,r_idx_list , l_idx_list)
+    plt.plot(x_list[idx_vtx_tri],y_list[idx_vtx_tri],"r^")
+    # r_idx_list , l_idx_list = split_r_l_charger(x_list,y_list,cluster_dict,label_charger,idx_vtx_tri)
+    # cal_theta(x_list,y_list,r_idx_list , l_idx_list)
     # print(ix_v_t)
+    return len(list_max_dis)
+
+
+
 
 def cal_theta(x_list,y_list,r_idx_list , l_idx_list):
     ################## will change linear reg for real line *fix
@@ -46,7 +52,6 @@ def cal_theta(x_list,y_list,r_idx_list , l_idx_list):
     pass
 
 def split_r_l_charger(x_list,y_list,cluster_dict,label_charger,idx_vtx_tri):
-
     plt.plot(x_list[idx_vtx_tri],y_list[idx_vtx_tri],"r^")
     fig = plt.gcf()
     ax = fig.gca()
@@ -64,8 +69,8 @@ def split_r_l_charger(x_list,y_list,cluster_dict,label_charger,idx_vtx_tri):
         dis_xy = math.sqrt(pow_dif_x+pow_dif_y)
         if dis_xy <= 0.2 :
             itls_idx_list.append(list_idx_charger[i])
-        
-    print( itls_idx_list)
+
+    # print( itls_idx_list)
     r_idx_list = []
     l_idx_list = []
     point_r_x = []
@@ -83,9 +88,9 @@ def split_r_l_charger(x_list,y_list,cluster_dict,label_charger,idx_vtx_tri):
             point_l_x.append(x_list[itls_idx_list[i]])
             point_l_y.append(y_list[itls_idx_list[i]])
             
-    print("R : "+str(r_idx_list))
-    print("L : "+str(l_idx_list))
-    print(r_idx_list[-1])
+    # print("R : "+str(r_idx_list))
+    # print("L : "+str(l_idx_list))
+    # print(r_idx_list[-1])
 
     ################## will change linear reg for real line *fix
     line_r_x = [x_list[r_idx_list[0]],x_list[r_idx_list[-1]]]
@@ -96,23 +101,35 @@ def split_r_l_charger(x_list,y_list,cluster_dict,label_charger,idx_vtx_tri):
     plt.ylim([-0.5,1.5])
     plt.show()
     plt.cla()
-    plt.plot(point_r_x,point_r_y,"g^")
-    plt.plot(point_l_x,point_l_y,"y*")
-    plt.plot(line_r_x,line_r_y,'r')
-    plt.plot(line_l_x,line_l_y,'b')
-    plt.show()
+    # plt.plot(point_r_x,point_r_y,"g^")
+    # plt.plot(point_l_x,point_l_y,"y*")
+    # plt.plot(line_r_x,line_r_y,'r')
+    # plt.plot(line_l_x,line_l_y,'b')
+    # plt.show()
     return r_idx_list , l_idx_list
 
 def check_charger(x_list,y_list, cluster_dict):
+    true_index_vertex_point_tri_of_cluster = 0
+    list_max_dis = []
     dis_list = []
-    threshold_dis =0.45
-    e_dis = 0.07
+    threshold_base =0.45
+    e_base = 0.07
     index_start_point_cluster = 0
+    index_end_point_cluster = 0
     label_cluster_charger = 0
-
+    index_vertex_point_tri_of_cluster = 0
+    threshold_high = 0.1
+    l_check_charger_idx_list = []
+    r_check_charger_idx_list = []
+    y_l_check_charger_list = []
+    y_r_check_charger_list = []
+    x_l_check_charger_list = []
+    x_r_check_charger_list = []
+    
     for i in range(len(cluster_dict)-1):
         # index_start_point_cluster += cluster_dict[i][cluster_dict[i].index(min(cluster_dict[i]))]
         index_start_point_cluster = cluster_dict[i][0]
+        index_end_point_cluster = cluster_dict[i][-1]
         # print(cluster_dict[i])
 
         # print(x_list[x_list.index(max(cluster_dict[i]))])
@@ -127,7 +144,7 @@ def check_charger(x_list,y_list, cluster_dict):
         dis_xy = math.sqrt(pow_dif_x+pow_dif_y)
         print("dis_xy cluster no."+str(i)+" : "+str(dis_xy))
         
-        if abs(dis_xy - threshold_dis) <= e_dis : 
+        if abs(dis_xy - threshold_base) <= e_base : 
 
             dis_list.append(dis_xy)
             center_base_x = (x_list[max(cluster_dict[i])]+x_list[min(cluster_dict[i])])/2
@@ -142,6 +159,7 @@ def check_charger(x_list,y_list, cluster_dict):
 
             x_rot_z_list = []
             y_rot_z_list = []
+
             for j in range(len(cluster_dict[i])):
                 point_x = x_list[cluster_dict[i][j]]
                 point_y = y_list[cluster_dict[i][j]]
@@ -164,14 +182,91 @@ def check_charger(x_list,y_list, cluster_dict):
             plt.plot([min_x_rot,min_x_rot],[min_y_rot,max_y_rot],"m")
             dif_y_rot = max_y_rot-min_y_rot 
             print("dif_y_rot (high triangel measure) : "+str(dif_y_rot))
-            if  dif_y_rot >= 0.1 :
+            if  dif_y_rot >= threshold_high :
                 # print("triiiii")
                 index_vertex_point_tri_of_list = y_rot_z_list.index(max(y_rot_z_list))
                 print("index_vertex_point_tri_of_list : "+str(index_vertex_point_tri_of_list))
                 index_vertex_point_tri_of_cluster = index_start_point_cluster+index_vertex_point_tri_of_list 
+                
                 print("index_max_point_of_cluster : "+str(index_vertex_point_tri_of_cluster))
                 label_cluster_charger = i
                 print("label_cluster_charger : "+str(label_cluster_charger))
+                print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
+                print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
+                print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
+
+                # for k in range(len(cluster_dict[i])):
+                #     if cluster_dict[i][k] <= index_vertex_point_tri_of_cluster :
+                #         l_check_charger_idx_list.append(k)
+                #         y_l_check_charger_list.append(y_rot_z_list[k])
+                #         x_l_check_charger_list.append(x_rot_z_list[k])
+                #     if cluster_dict[i][k] >= index_vertex_point_tri_of_cluster :
+                #         r_check_charger_idx_list.append(k)
+                #         y_r_check_charger_list.append(y_rot_z_list[k])
+                #         x_r_check_charger_list.append(x_rot_z_list[k])
+                #     pass
+                # plt.plot(x_r_check_charger_list,y_r_check_charger_list,"r.")
+                # plt.plot(x_l_check_charger_list,y_l_check_charger_list,"b.")
+
+
+                # min_idx_r = y_r_check_charger_list.index(min(y_r_check_charger_list))
+                # min_idx_l = y_l_check_charger_list.index(min(y_l_check_charger_list))
+
+                # print(y_r_check_charger_list)
+                # print(min_idx_r)
+                
+                
+                # plt.plot(x_r_check_charger_list[min_idx_r],y_r_check_charger_list[min_idx_r],"ks")
+                # plt.plot(x_l_check_charger_list[min_idx_l],y_l_check_charger_list[min_idx_l],"ws")
+
+                # print(l_check_charger_idx_list)
+                # print(r_check_charger_idx_list)
+                # # print(cluster_dict[i])
+
+                # for k in range(len(l_check_charger_idx_list)):
+                #     pass
+                # # r_check_charger_idx_list
+                    
+                x_list[index_vertex_point_tri_of_cluster]
+                y_list[index_vertex_point_tri_of_cluster]
+
+                x_list[index_end_point_cluster]
+                y_list[index_end_point_cluster]
+                x_list[index_start_point_cluster]
+                y_list[index_start_point_cluster]
+
+                check_line_r_dif_x = abs(x_list[index_vertex_point_tri_of_cluster]-x_list[index_end_point_cluster])
+                check_line_r_dif_y = abs(y_list[index_vertex_point_tri_of_cluster]-y_list[index_end_point_cluster])
+                check_line_r_pow_dif_x = check_line_r_dif_x**2
+                check_line_r_pow_dif_y = check_line_r_dif_y**2
+                check_line_r_dis = math.sqrt(check_line_r_pow_dif_x + check_line_r_pow_dif_y)
+
+                check_line_l_dif_x = abs(x_list[index_vertex_point_tri_of_cluster]-x_list[index_start_point_cluster])
+                check_line_l_dif_y = abs(y_list[index_vertex_point_tri_of_cluster]-y_list[index_start_point_cluster])
+                check_line_l_pow_dif_x = check_line_l_dif_x**2
+                check_line_l_pow_dif_y = check_line_l_dif_y**2
+                check_line_l_dis = math.sqrt(check_line_l_pow_dif_x + check_line_l_pow_dif_y)
+                print("line l distance : "+str(check_line_l_dis))
+                print("line r distance : "+str(check_line_r_dis))
+                line_r_l_dif = abs(check_line_l_dis-check_line_r_dis)
+                print("difference : " + str(line_r_l_dif) )
+                plt.plot(x_list[index_end_point_cluster],y_list[index_end_point_cluster],'ks')
+                plt.plot(x_list[index_start_point_cluster],y_list[index_start_point_cluster],'ks')
+                if abs(line_r_l_dif) < 0.05 :
+                    list_max_dis.append(line_r_l_dif)
+                    true_index_vertex_point_tri_of_cluster = index_vertex_point_tri_of_cluster
+                print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
+                print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
+                print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
+
+                
+
+
+
+
+
+
+
         # plt.plot(cluster_dict[i][index_vertex_point_tri_of_list])
         line_dis_x = [x_list[min(cluster_dict[i])], x_list[max(cluster_dict[i])]]
         line_dis_y = [y_list[min(cluster_dict[i])], y_list[max(cluster_dict[i])]]
@@ -183,8 +278,7 @@ def check_charger(x_list,y_list, cluster_dict):
         
     
     print("dis_list"+str(dis_list))
-    return index_vertex_point_tri_of_cluster,label_cluster_charger
-
+    return true_index_vertex_point_tri_of_cluster,label_cluster_charger,list_max_dis
 
 # eps=0.04, min_samples=5
 def lidar_DBscan(x_list,y_list,eps_value=0.04,min_samples_value=5,show_plot = 1):
@@ -258,8 +352,8 @@ def lidar_DBscan(x_list,y_list,eps_value=0.04,min_samples_value=5,show_plot = 1)
         ### plt.show()
     return cluster_dict 
 
-
 def main(args=None):
+    x = 0
     # start_file = 1
     # end_file = 50    
     dis_list = []
@@ -269,15 +363,15 @@ def main(args=None):
         print("-----------------------------------------------------------------------------------------")
         print("-----------------------------------------------------------------------------------------")
         print("current_file : " + str(current_file))
-        plot_check_cluster(current_file)
+        l = plot_check_cluster(current_file)
         if show_key == 1:
             plt.xlim([-1.5, 1.5])
             plt.ylim([-0.5,1.5])
             plt.title(f"current_file : {current_file}")
             plt.show()
         current_file += 1
-        
-
+        x += l
+    print(x)
     # print("num_dis_list"+str(len(dis_list)))
     # print(dis_list)
     # for i in range(len(dis_list)):
